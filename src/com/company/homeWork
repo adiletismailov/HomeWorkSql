@@ -1,0 +1,184 @@
+IDEA{
+
+CREATE TABLE country(
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE capital(
+    id         BIGSERIAL PRIMARY KEY,
+    areas      VARCHAR(50) NOT NULL,
+    country_id INT REFERENCES country (id)
+);
+
+CREATE TABLE courses(
+    id         BIGSERIAL PRIMARY KEY,
+    name       VARCHAR(50)  NOT NULL,
+    address    VARCHAR(150) NOT NULL,
+    capital_id INT REFERENCES capital (id)
+);
+
+CREATE TABLE laptop(
+    id     BIGSERIAL PRIMARY KEY,
+    name   VARCHAR(50) NOT NULL,
+    colour VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE cars(
+    id         BIGSERIAL PRIMARY KEY,
+    name_car   VARCHAR(30) NOT NULL,
+    colour     VARCHAR(20) NOT NULL,
+    country_id INT REFERENCES country (id),
+    license_id INT REFERENCES license (id)
+);
+
+CREATE TABLE university(
+    id         BIGSERIAL PRIMARY KEY,
+    name       VARCHAR(100) NOT NULL,
+    capital_id INT REFERENCES capital (id)
+);
+
+CREATE TABLE students
+(
+    id            BIGSERIAL PRIMARY KEY,
+    first_name    VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50),
+    gender        VARCHAR(6)  NOT NULL,
+    email         VARCHAR(100) UNIQUE,
+    date_of_birth DATE        NOT NULL,
+    country_id    INT REFERENCES country (id),
+    laptop_id     INT REFERENCES laptop (id),
+    cars_id       INT REFERENCES cars (id)
+);
+
+CREATE TABLE mentors
+(
+    id            BIGSERIAL PRIMARY KEY,
+    first_name    VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50),
+    gender        VARCHAR(6)  NOT NULL,
+    email         VARCHAR(150) UNIQUE,
+    date_of_birth DATE        NOT NULL,
+    country_id    INT REFERENCES country (id),
+    cars_id       INT REFERENCES cars (id),
+    laptop_id     INT REFERENCES laptop (id)
+);
+
+
+
+CREATE TABLE teachers
+(
+    id            BIGSERIAL PRIMARY KEY,
+    first_name    VARCHAR(50) NOT NULL,
+    last_name     VARCHAR(50),
+    gender        VARCHAR(6)  NOT NULL,
+    email         VARCHAR(150) UNIQUE,
+    date_of_birth DATE        NOT NULL,
+    country_id    INT REFERENCES country (id),
+    cars_id       INT REFERENCES cars (id)
+);
+
+CREATE TABLE license
+(
+    id              BIGSERIAL PRIMARY KEY,
+    date_of_issue   DATE NOT NULL,
+    expiration_date DATE NOT NULL
+);
+
+INSERT INTO country (name)
+VALUES ('Kyrgyzstan'),
+       ('Russia'),
+       ('USA');
+
+INSERT INTO capital (areas, country_id)
+VALUES ('Bishkek', 1),
+       ('Moscow', 2),
+       ('Washington', 3);
+
+INSERT INTO courses (name, address, capital_id)
+VALUES ('Peaksoft', 'vostok-5', 1),
+       ('PeaksoftMoscow', 'Moscow', 2),
+       ('peaksoftWashington', 'Washington', 3);
+
+INSERT INTO laptop (name, colour)
+VALUES ('MacBook Pro', 'silver'),
+       ('Asus', 'white'),
+       ('Acer', 'black');
+
+INSERT INTO cars (name_car, colour, country_id)
+VALUES ('Mercedes', 'white', 1),
+       ('BMW', 'black', 2),
+       ('Toyota', 'red', 3);
+
+INSERT INTO university (name, capital_id)
+VALUES ('Manas', 1),
+       ('MGU', 2),
+       ('Harvard', 3);
+
+INSERT INTO students (first_name, last_name, gender, email, date_of_birth, country_id, laptop_id, cars_id)
+VALUES ('Adilet', 'Ismailov', 'MALE', 'adiletismailov045@gmail.com', DATE'2000-09-07', 3, 1, 1),
+       ('Joni', 'Akbalaev', 'MALE', 'joniakbalaev015@gmail.com', DATE'2004-02-27', 1, 2, 2),
+       ('Kuba', 'Kelsinbekov', 'MALE', 'kubakelsinbekov025@gmail.com', DATE'2002-04-02', 1, 3, 3);
+
+INSERT INTO mentors (first_name, last_name, gender, email, date_of_birth, country_id, cars_id, laptop_id)
+VALUES ('Rahim', 'Bazarbai uulu', 'MALE', 'rahimbazarbaiuulu@gmail.com', '2003-04-02', 1, 3, 2),
+       ('Muhammed', 'Toichubai uulu', 'MALE', 'muhammedtoichubaiuulu@gmail.com', '1997-06-15', 2, 2, 3),
+       ('Adilet', 'Ismailov', 'MALE', 'adiletismailov@gmail.com', '2000-09-07', 3, 1, 1);
+
+INSERT INTO teachers (first_name, last_name, gender, email, date_of_birth, country_id, cars_id)
+VALUES ('Ilim', 'Shabdanov', 'MALE', 'ilimshabdanov@gmail.com', '2002-06-14', 1, null),
+       ('Adil', 'Aitbaev', 'MALE', 'adilaitbaev@gmail.com', '2003-08-27', 2, null),
+       ('Aijamal', 'Asangazieva', 'FEMALE', 'aijamalasangazieva@gmail.com', '1997-09-15', 3, 1);
+
+INSERT INTO license (date_of_issue, expiration_date)
+VALUES (DATE '2022-12-22',DATE '2023-12-22'),
+       (DATE '2022-06-06',DATE '2023-06-06'),
+       (DATE '2022-01-01',DATE '2023-01-01');
+}
+
+terminal{
+terminaljob=# SELECT * FROM cinema;
+ id |     name     | year_of_issue | actors_id
+----+--------------+---------------+-----------
+  1 | Armor of God | 1987-01-21    |         1
+  2 | Rush Hour    | 1998-09-18    |         3
+  3 | Another War  | 2014-04-03    |         8
+(3 rows)
+
+terminaljob=# SELECT * FROM actors;
+ id | first_name | last_name | gender |  country  | date_of_birth
+----+------------+-----------+--------+-----------+---------------
+  1 | Jackie     | Chan      | MALE   | China     | 1954-04-07
+  2 | Leonardo   | DiCaprio  | MALE   | USA       | 1974-11-11
+  3 | Will       | Smith     | MALE   | USA       | 1968-09-25
+  4 | Chris      | Hemsworth | MALE   | Australia | 1983-08-11
+  5 | Angelina   | Jolie     | FEMALE | USA       | 1975-06-04
+  6 | Gal        | Gadot     | FEMALE | Israel    | 1985-04-30
+  7 | Emilia     | Clarke    | FEMALE | Britannia | 1986-10-23
+  8 | Scarlett   | Johansson | FEMALE | USA       | 1984-11-22
+
+  terminaljob=# SELECT * FROM cafe;
+   id |   name    |  address
+  ----+-----------+------------
+    1 | Faiza     | Jibek-jolu
+    2 | Fast-Foot | Vostok-5
+  (2 rows)
+
+  terminaljob=# SELECT * FROM dish;
+   id |  name   | price | cafe_id
+  ----+---------+-------+---------
+    1 | lagman  |   250 |       1
+    2 | plov    |   200 |       1
+    3 | Mastava |   150 |       1
+    4 | Shaurma |   170 |       2
+    5 | Burger  |   150 |       2
+    6 | Hot-Dog |   120 |       2
+  (6 rows)
+
+  terminaljob=# SELECT * FROM client;
+   id |  name  | dish_id
+  ----+--------+---------
+    1 | Adilet |       2
+    2 | Joni   |       4
+
+}
